@@ -18,11 +18,49 @@ namespace Oblig_2_Opt
 			int[] check = new int[nodes];
 			RandomColor(color, nodes);
 			NumberOfConnections(check, nodes);
-			RandomGraph(connections, restriction, check, nodes);
+			RandomGraph(connections, restriction, nodes);
+			//RandomGraphAndreas(connections, restriction, check, nodes);
 			PrintGraph(connections, nodes);
 		}
 
-		static void RandomGraph(int[,] connections, int[] restriction, int[] check, int nodes)
+		static void RandomGraph(int [,] connection, int[]restriction, int nodes)
+		{
+			Random rnd = new Random();
+			int random;
+			int select;
+			int counter = 0;
+
+			for (int i = 0; i < nodes; i++)
+			{
+
+				select = rnd.Next(1, 4); //number of connectiosn that a node will have, from 1 to 3
+				while (counter < select)
+				{
+					//loop insures that a node will connect to other nodes, unless there a node can't connect to more
+
+					random = rnd.Next(0, nodes);
+
+					//if a node already has max connections
+					if (restriction[i] == 3 || restriction[random] == 3)
+						counter = 99;
+					//connect nodes as long as they haven't reached max connections and that they dont connect to itself
+					else if (restriction[i] != 3 && restriction[random] != 3 && i != random)
+					{
+						if (connection[i, random] == 1)
+							continue;
+						connection[i, random] = 1;
+						connection[random, i] = 1;
+						restriction[i] = restriction[i] + 1;
+						restriction[random] = restriction[random] + 1;
+						counter++;
+					}
+				}
+				counter = 0;    //reset counter so the while loop will work again
+			}
+
+		}
+
+		static void RandomGraphAndreas(int[,] connections, int[] restriction, int[] check, int nodes)
 		{
 			int teller = 0;
 			int counter = 0;
